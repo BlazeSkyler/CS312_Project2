@@ -1,0 +1,1 @@
+public_key = "Your public key goes here"
