@@ -83,7 +83,7 @@ resource "aws_instance" "mc_server" {
       timeout = "2m"
     }
     inline = [
-      "./${file("./docker_install.sh")}"
+      "./${file("../docker_install.sh")}"
       ]
   }
 }
