@@ -50,6 +50,14 @@ resource "aws_vpc_security_group_ingress_rule" "https" {
   cidr_ipv4         = "0.0.0.0/0"
 }
 
+# resource "aws_vpc_security_group_ingress_rule" "http" {
+#   security_group_id = aws_security_group.mc_sec_group.id
+#   from_port         = 80
+#   to_port           = 80
+#   ip_protocol       = "tcp"
+#   cidr_ipv4         = "0.0.0.0/0"
+# }
+
 resource "aws_vpc_security_group_ingress_rule" "mc_port" {
   security_group_id = aws_security_group.mc_sec_group.id
   from_port         = 25565
@@ -66,12 +74,24 @@ resource "aws_vpc_security_group_egress_rule" "all_outbound" {
 
 resource "aws_instance" "mc_server" {
   ami                    = "ami-0a605bc2ef5707a18"
-  instance_type          = "t3.micro"
+  instance_type          = "t3.small"
   vpc_security_group_ids = [aws_security_group.mc_sec_group.id]
   key_name               = aws_key_pair.pub_key.key_name
 
   tags = {
     Name = "Minecraft_Server_2"
+  }
+
+  provisioner "file" {
+    connection {
+      host = "${self.public_dns}"
+      user = "ubuntu"
+      type = "ssh"
+      private_key = "${file("~/.ssh/id_rsa")}"
+      timeout = "2m"
+    }
+    source = "../docker-mc/docker-compose.yml"
+    destination = "/home/ubuntu/docker-compose.yml"
   }
 
   provisioner "remote-exec" {
@@ -83,7 +103,20 @@ resource "aws_instance" "mc_server" {
       timeout = "2m"
     }
     inline = [
-      "./${file("../docker_install.sh")}"
+      "./${file("../docker-mc/docker_install.sh")}"
+      ]
+  }
+
+  provisioner "remote-exec" {
+    connection {
+      host = "${self.public_dns}"
+      user = "ubuntu"
+      type = "ssh"
+      private_key = "${file("~/.ssh/id_rsa")}"
+      timeout = "2m"
+    }
+    inline = [
+      "./${file("../docker-mc/start_server.sh")}"
       ]
   }
 }
