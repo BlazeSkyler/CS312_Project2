@@ -50,14 +50,6 @@ resource "aws_vpc_security_group_ingress_rule" "https" {
   cidr_ipv4         = "0.0.0.0/0"
 }
 
-# resource "aws_vpc_security_group_ingress_rule" "http" {
-#   security_group_id = aws_security_group.mc_sec_group.id
-#   from_port         = 80
-#   to_port           = 80
-#   ip_protocol       = "tcp"
-#   cidr_ipv4         = "0.0.0.0/0"
-# }
-
 resource "aws_vpc_security_group_ingress_rule" "mc_port" {
   security_group_id = aws_security_group.mc_sec_group.id
   from_port         = 25565
@@ -103,6 +95,7 @@ resource "aws_instance" "mc_server" {
       timeout = "2m"
     }
     inline = [
+      "chmod +x ../docker-mc/docker_install.sh",
       "./${file("../docker-mc/docker_install.sh")}"
       ]
   }
@@ -116,6 +109,7 @@ resource "aws_instance" "mc_server" {
       timeout = "2m"
     }
     inline = [
+      "chmod +x ../docker-mc/start_server.sh",
       "./${file("../docker-mc/start_server.sh")}"
       ]
   }

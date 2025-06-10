@@ -9,4 +9,4 @@ services:
       EULA: "TRUE"
     restart: always
     volumes:
-      - ./data:/data
+      - ~/minecraft-server:/data
