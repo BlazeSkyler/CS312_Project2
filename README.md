@@ -2,7 +2,7 @@
 
 ## Background
 
-This GitHub repo contains files and scripts that automatically provision and configure the infrastructure needed to run a Minecraft server. The tools used are **Terraform** and **Docker**. Terraform is used to spin up an AWS EC2 instance. After that is created, an SSH connection is created to run bash scripts that install docker. A separate script is used to run the server using docker compose, which uses a .yml script that is put in the instance.
+This GitHub repo contains files and scripts that automatically provision and configure the infrastructure needed to run a Minecraft server. The tools used are **Terraform** and **Docker**. Terraform is used to spin up an AWS EC2 instance. After that is created, an SSH connection is created to run bash scripts that install docker. A separate script is used to run the server using docker compose, which uses a .yml script that is put in the instance. On a reboot, the container will stay on the instance and the service will automatically restart.
 
 ## Requirements
 
@@ -42,6 +42,8 @@ After cloning the repo, there a few steps needed before running the scripts.
 
 ## Diagram
 
+![alt text](./Pipeline_Diagram.jpg)
+
 ## How to Run
 
 1. Navigate to terraform folder. If the repo was cloned in the home directory this can be done with `cd ~/CS312_Project2/terraform`.
@@ -56,7 +58,7 @@ This creates the infrastructure with every file that ends with .tf, including ou
 
 After the `terraform apply-var-file"key.tvars"` command finishes executing, it will output the public IP of your EC2 instance. You can connect to the server from a Minecraft client by using <instance_public_ip>:25565.
 
-**Note**: Even after the command finishes, the Minecraft server will take 2-5 minutes to start up. You can check if it is up using `nmap -sV -Pn -p T:25565 <instance_public_ip>`
+**Note**: Even after the command finishes, the Minecraft server will take 2-5 minutes to start up. You can check if it is up using `nmap -sV -Pn -p T:25565 <instance_public_ip>`.
 
 ## Sources
 
