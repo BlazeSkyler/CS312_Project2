@@ -1,0 +1,1 @@
+public_key = "Your public key goes here. This is found in ~/.ssh/id_rsa"
